@@ -38,34 +38,7 @@ Mengimplementasikan fitur pencatatan (audit log) setiap system call yang dilakuk
 [1] PID=1 SYSCALL=6 TICK=2
 [2] PID=1 SYSCALL=10 TICK=3
 ...
-
-### 📍 Contoh Output `cowtest`:
-
-```
-Child sees: Y
-Parent sees: X
-```
-
-### 📍 Contoh Output `shmtest`:
-
-```
-Child reads: A
-Parent reads: B
-```
-
-### 📍 Contoh Output `chmodtest`:
-
-```
-Write blocked as expected
-```
-
-Jika ada screenshot:
-
-```
-![hasil cowtest](./screenshots/cowtest_output.png)
-```
-
----
+### 📍 `Screenshot`:
 
 ## ⚠️ Kendala yang Dihadapi
 
