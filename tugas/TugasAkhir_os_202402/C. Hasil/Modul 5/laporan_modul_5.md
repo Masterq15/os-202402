@@ -2,50 +2,42 @@
 
 **Mata Kuliah**: Sistem Operasi
 **Semester**: Genap / Tahun Ajaran 2024–2025
-**Nama**: `<Nama Lengkap>`
-**NIM**: `<Nomor Induk Mahasiswa>`
+**Nama**: `<Risky Dimas Nugroho>`
+**NIM**: `<240202882>`
 **Modul yang Dikerjakan**:
-`(Contoh: Modul 1 – System Call dan Instrumentasi Kernel)`
+`(Modul 5 - Audit dan Keamanan Sistem)`
 
 ---
 
 ## 📌 Deskripsi Singkat Tugas
 
-Tuliskan deskripsi singkat dari modul yang Anda kerjakan. Misalnya:
-
-* **Modul 1 – System Call dan Instrumentasi Kernel**:
-  Menambahkan dua system call baru, yaitu `getpinfo()` untuk melihat proses yang aktif dan `getReadCount()` untuk menghitung jumlah pemanggilan `read()` sejak boot.
----
+Modul 5 – Audit dan Keamanan Sistem:
+Mengimplementasikan fitur pencatatan (audit log) setiap system call yang dilakukan proses. Data dicatat ke buffer kernel yang hanya bisa diakses oleh proses init (PID 1) melalui system call get_audit_log().
 
 ## 🛠️ Rincian Implementasi
 
-Tuliskan secara ringkas namun jelas apa yang Anda lakukan:
-
-### Contoh untuk Modul 1:
-
-* Menambahkan dua system call baru di file `sysproc.c` dan `syscall.c`
-* Mengedit `user.h`, `usys.S`, dan `syscall.h` untuk mendaftarkan syscall
-* Menambahkan struktur `struct pinfo` di `proc.h`
-* Menambahkan counter `readcount` di kernel
-* Membuat dua program uji: `ptest.c` dan `rtest.c`
----
-
+* Menambahkan struktur audit_entry dan array audit_log[] di syscall.c
+* Mencatat PID, syscall_num, dan tick pada setiap pemanggilan system call
+* Menambahkan syscall baru get_audit_log() di sysproc.c, dan deklarasi di defs.h, user.h, usys.S, syscall.h
+* Program uji audit.c untuk menampilkan isi log
+* Memodifikasi init.c agar langsung menjalankan audit (sebagai PID 1)
+* Menambahkan audit ke Makefile dalam bagian UPROGS
+* 
 ## ✅ Uji Fungsionalitas
 
-Tuliskan program uji apa saja yang Anda gunakan, misalnya:
-
-* `ptest`: untuk menguji `getpinfo()`
-* `rtest`: untuk menguji `getReadCount()`
-* `cowtest`: untuk menguji fork dengan Copy-on-Write
-* `shmtest`: untuk menguji `shmget()` dan `shmrelease()`
-* `chmodtest`: untuk memastikan file `read-only` tidak bisa ditulis
-* `audit`: untuk melihat isi log system call (jika dijalankan oleh PID 1)
+* audit: program utama dijalankan oleh init, menampilkan semua system call yang telah terjadi.
+* Jika program audit dijalankan oleh proses selain PID 1, maka akan gagal (Access denied)
 
 ---
 
 ## 📷 Hasil Uji
 
-Lampirkan hasil uji berupa screenshot atau output terminal. Contoh:
+### 📍 Output `audit`:
+=== Audit Log ===
+[0] PID=1 SYSCALL=5 TICK=2
+[1] PID=1 SYSCALL=6 TICK=2
+[2] PID=1 SYSCALL=10 TICK=3
+...
 
 ### 📍 Contoh Output `cowtest`:
 
@@ -77,21 +69,16 @@ Jika ada screenshot:
 
 ## ⚠️ Kendala yang Dihadapi
 
-Tuliskan kendala (jika ada), misalnya:
-
-* Salah implementasi `page fault` menyebabkan panic
-* Salah memetakan alamat shared memory ke USERTOP
-* Proses biasa bisa akses audit log (belum ada validasi PID)
-
----
+* Validasi PID di syscall get_audit_log() agar hanya proses init yang dapat mengakses log
+* Penanganan pointer user-space menggunakan argptr() dan memmove()
+* Menjaga proses init tetap hidup (menggunakan sleep() terus-menerus) agar kernel tidak panic
+  Menambahkan audit sebelum syscall dijalankan namun tetap aman dari errorValidasi PID di syscall get_audit_log() agar hanya proses init yang dapat mengakses log
+  Penanganan pointer user-space menggunakan argptr() dan memmove()
+* Menjaga proses init tetap hidup (menggunakan sleep() terus-menerus) agar kernel tidak panic
+* Menambahkan audit sebelum syscall dijalankan namun tetap aman dari error
 
 ## 📚 Referensi
 
-Tuliskan sumber referensi yang Anda gunakan, misalnya:
-
-* Buku xv6 MIT: [https://pdos.csail.mit.edu/6.828/2018/xv6/book-rev11.pdf](https://pdos.csail.mit.edu/6.828/2018/xv6/book-rev11.pdf)
-* Repositori xv6-public: [https://github.com/mit-pdos/xv6-public](https://github.com/mit-pdos/xv6-public)
-* Stack Overflow, GitHub Issues, diskusi praktikum
-
----
-
+* Buku xv6 MIT: https://pdos.csail.mit.edu/6.828/2018/xv6/book-rev11.pdf
+* Repositori xv6-public: https://github.com/mit-pdos/xv6-public
+* Diskusi praktikum, GitHub Issues, Stack Overflow
