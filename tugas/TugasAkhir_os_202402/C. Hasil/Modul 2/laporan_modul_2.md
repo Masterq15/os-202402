@@ -1,97 +1,76 @@
+
 # 📝 Laporan Tugas Akhir
 
-**Mata Kuliah**: Sistem Operasi
-**Semester**: Genap / Tahun Ajaran 2024–2025
-**Nama**: `<Nama Lengkap>`
-**NIM**: `<Nomor Induk Mahasiswa>`
-**Modul yang Dikerjakan**:
-`(Contoh: Modul 1 – System Call dan Instrumentasi Kernel)`
+**Mata Kuliah**: Sistem Operasi  
+**Semester**: Genap / Tahun Ajaran 2024–2025  
+**Nama**: Risky Dimas Nugroho
+**NIM**: 240202882  
+
+**Modul yang Dikerjakan**:  
+Modul 2 – Penjadwalan CPU Lanjutan (Priority Scheduling Non-Preemptive)
 
 ---
 
 ## 📌 Deskripsi Singkat Tugas
 
-Tuliskan deskripsi singkat dari modul yang Anda kerjakan. Misalnya:
+* **Modul 2 – Penjadwalan CPU Lanjutan**  
+  Mengubah algoritma penjadwalan proses di `xv6-public` dari **Round Robin** menjadi **Priority Scheduling Non-Preemptive**, dengan menambahkan field `priority` ke setiap proses, membuat syscall `set_priority(int)`, serta memodifikasi scheduler agar menjalankan proses `RUNNABLE` dengan prioritas tertinggi terlebih dahulu (prioritas angka terkecil = paling tinggi).
 
-* **Modul 1 – System Call dan Instrumentasi Kernel**:
-  Menambahkan dua system call baru, yaitu `getpinfo()` untuk melihat proses yang aktif dan `getReadCount()` untuk menghitung jumlah pemanggilan `read()` sejak boot.
 ---
 
 ## 🛠️ Rincian Implementasi
 
-Tuliskan secara ringkas namun jelas apa yang Anda lakukan:
+* Menambahkan field `int priority` pada `struct proc` di `proc.h`
+* Inisialisasi default priority (60) di fungsi `allocproc()` pada `proc.c`
+* Menambahkan syscall `set_priority(int)`:
+  - Menambah entri `SYS_set_priority` di `syscall.h`
+  - Deklarasi syscall di `user.h` dan `usys.S`
+  - Registrasi di `syscall.c` (fungsi dan tabel syscall)
+  - Implementasi fungsi syscall di `sysproc.c`
+* Memodifikasi fungsi `scheduler()` di `proc.c` agar memilih proses `RUNNABLE` dengan `priority` terendah (non-preemptive)
+* Membuat program uji `ptest.c` untuk menguji apakah proses dengan prioritas lebih tinggi dijalankan terlebih dahulu
+* Menambahkan `_ptest` ke daftar `UPROGS` dalam `Makefile`
 
-### Contoh untuk Modul 1:
-
-* Menambahkan dua system call baru di file `sysproc.c` dan `syscall.c`
-* Mengedit `user.h`, `usys.S`, dan `syscall.h` untuk mendaftarkan syscall
-* Menambahkan struktur `struct pinfo` di `proc.h`
-* Menambahkan counter `readcount` di kernel
-* Membuat dua program uji: `ptest.c` dan `rtest.c`
 ---
 
 ## ✅ Uji Fungsionalitas
 
-Tuliskan program uji apa saja yang Anda gunakan, misalnya:
-
-* `ptest`: untuk menguji `getpinfo()`
-* `rtest`: untuk menguji `getReadCount()`
-* `cowtest`: untuk menguji fork dengan Copy-on-Write
-* `shmtest`: untuk menguji `shmget()` dan `shmrelease()`
-* `chmodtest`: untuk memastikan file `read-only` tidak bisa ditulis
-* `audit`: untuk melihat isi log system call (jika dijalankan oleh PID 1)
+* Program `ptest` membuat dua child process:
+  - Child pertama diberi prioritas `90` (lebih rendah)
+  - Child kedua diberi prioritas `10` (lebih tinggi)
+* Hasil yang diharapkan:
+  - Child 2 selesai duluan
+  - Child 1 selesai setelahnya
+  - Parent selesai terakhir
 
 ---
 
 ## 📷 Hasil Uji
 
-Lampirkan hasil uji berupa screenshot atau output terminal. Contoh:
-
-### 📍 Contoh Output `cowtest`:
+### 📍 Output `ptest`:
 
 ```
-Child sees: Y
-Parent sees: X
+Child 2 selesai
+Child 1 selesai
+Parent selesai
 ```
 
-### 📍 Contoh Output `shmtest`:
-
-```
-Child reads: A
-Parent reads: B
-```
-
-### 📍 Contoh Output `chmodtest`:
-
-```
-Write blocked as expected
-```
-
-Jika ada screenshot:
-
-```
-![hasil cowtest](./screenshots/cowtest_output.png)
-```
+### 📸 Screenshot:
+![hasil ptest](./screenshot/ptestPriority.png)
 
 ---
 
 ## ⚠️ Kendala yang Dihadapi
-
-Tuliskan kendala (jika ada), misalnya:
-
-* Salah implementasi `page fault` menyebabkan panic
-* Salah memetakan alamat shared memory ke USERTOP
-* Proses biasa bisa akses audit log (belum ada validasi PID)
+proses terlalu cepat sehingga hasil tidak konsisten 
+solusi:parent perlu diberi durasi sleep
 
 ---
 
 ## 📚 Referensi
 
-Tuliskan sumber referensi yang Anda gunakan, misalnya:
-
-* Buku xv6 MIT: [https://pdos.csail.mit.edu/6.828/2018/xv6/book-rev11.pdf](https://pdos.csail.mit.edu/6.828/2018/xv6/book-rev11.pdf)
-* Repositori xv6-public: [https://github.com/mit-pdos/xv6-public](https://github.com/mit-pdos/xv6-public)
-* Stack Overflow, GitHub Issues, diskusi praktikum
-
+* Buku xv6 MIT: [https://pdos.csail.mit.edu/6.828/2018/xv6/book-rev11.pdf](https://pdos.csail.mit.edu/6.828/2018/xv6/book-rev11.pdf)  
+* Repositori xv6-public: [https://github.com/mit-pdos/xv6-public](https://github.com/mit-pdos/xv6-public)  
+* Diskusi praktikum, GitHub Issues, Stack Overflow
+  
 ---
-
+---
