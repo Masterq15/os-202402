@@ -2,7 +2,7 @@
 
 **Mata Kuliah**: Sistem Operasi  
 **Semester**: Genap / Tahun Ajaran 2024–2025  
-**Nama**: Risky Dimas Nugroho
+**Nama**: Risky Dimas Nugroho                     
 **NIM**: 240202882  
 **Modul yang Dikerjakan**:  
 Modul 5 – Audit dan Keamanan Sistem  
