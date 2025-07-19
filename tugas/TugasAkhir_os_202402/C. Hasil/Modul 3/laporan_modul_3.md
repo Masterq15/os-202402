@@ -5,7 +5,7 @@
 **Nama**: Risky Dimas Nugroho                        
 **NIM**: 240202882  
 **Modul yang Dikerjakan**:  
-Modul 5 – Manajemen Memori Lanjutan  
+Modul 3 – Manajemen Memori Lanjutan  
 (A. Copy-on-Write Fork, B. Shared Memory ala System V)
 
 ---
