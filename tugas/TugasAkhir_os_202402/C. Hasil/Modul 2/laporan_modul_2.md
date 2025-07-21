@@ -1,53 +1,66 @@
-
 # 📝 Laporan Tugas Akhir
 
 **Mata Kuliah**: Sistem Operasi  
 **Semester**: Genap / Tahun Ajaran 2024–2025  
-**Nama**: Risky Dimas Nugroho                         
-**NIM**: 240202882  
-
-**Modul yang Dikerjakan**:  
-Modul 2 – Penjadwalan CPU Lanjutan (Priority Scheduling Non-Preemptive)
+**Nama**: MasterQ  
+**NIM**: 696879678  
+**Modul yang Dikerjakan**: Modul 2 — Penjadwalan CPU Lanjutan (Priority Scheduling Non-Preemptive)
 
 ---
 
 ## 📌 Deskripsi Singkat Tugas
 
-* **Modul 2 – Penjadwalan CPU Lanjutan**  
-  Mengubah algoritma penjadwalan proses di `xv6-public` dari **Round Robin** menjadi **Priority Scheduling Non-Preemptive**, dengan menambahkan field `priority` ke setiap proses, membuat syscall `set_priority(int)`, serta memodifikasi scheduler agar menjalankan proses `RUNNABLE` dengan prioritas tertinggi terlebih dahulu (prioritas angka terkecil = paling tinggi).
+Pada modul ini, dilakukan modifikasi terhadap algoritma penjadwalan proses di sistem operasi xv6-public. Algoritma default Round Robin diubah menjadi Non-Preemptive Priority Scheduling. Modifikasi ini bertujuan untuk meningkatkan kontrol eksekusi proses berdasarkan prioritas numerik (semakin kecil nilai, semakin tinggi prioritasnya).
 
 ---
 
 ## 🛠️ Rincian Implementasi
 
-* Menambahkan field `int priority` pada `struct proc` di `proc.h`
-* Inisialisasi default priority (60) di fungsi `allocproc()` pada `proc.c`
-* Menambahkan syscall `set_priority(int)`:
-  - Menambah entri `SYS_set_priority` di `syscall.h`
-  - Deklarasi syscall di `user.h` dan `usys.S`
-  - Registrasi di `syscall.c` (fungsi dan tabel syscall)
-  - Implementasi fungsi syscall di `sysproc.c`
-* Memodifikasi fungsi `scheduler()` di `proc.c` agar memilih proses `RUNNABLE` dengan `priority` terendah (non-preemptive)
-* Membuat program uji `ptest.c` untuk menguji apakah proses dengan prioritas lebih tinggi dijalankan terlebih dahulu
-* Menambahkan `_ptest` ke daftar `UPROGS` dalam `Makefile`
+Berikut adalah langkah-langkah implementasi yang dilakukan:
+
+1. **Menambahkan Field `priority` pada struct proc**  
+   - File: `proc.h`  
+   - Deskripsi: Field `int priority;` ditambahkan untuk menyimpan nilai prioritas setiap proses.
+
+2. **Inisialisasi Default Prioritas Proses Baru**  
+   - File: `proc.c`, fungsi `allocproc()`  
+   - Nilai default ditetapkan ke `60`.
+
+3. **Menambahkan System Call Baru `set_priority(int)`**  
+   - File yang diubah:  
+     - `syscall.h` → Tambah `#define SYS_set_priority 24`  
+     - `user.h` → Tambah `int set_priority(int);`  
+     - `usys.S` → Tambah `SYSCALL(set_priority)`  
+     - `syscall.c` → Daftarkan syscall pada array `syscalls[]`  
+     - `sysproc.c` → Implementasi fungsi `sys_set_priority()` untuk menetapkan nilai prioritas proses pemanggil
+
+4. **Modifikasi Scheduler**  
+   - File: `proc.c`, fungsi `scheduler()`  
+   - Logika dijalankan untuk memilih proses RUNNABLE dengan nilai prioritas terkecil  
+   - Scheduler bersifat **non-preemptive** dan **deterministik**
+
+5. **Program Uji `ptest.c`**  
+   - Simulasi dua proses anak dengan prioritas berbeda:  
+     - Child 1: Prioritas 90 (rendah)  
+     - Child 2: Prioritas 10 (tinggi)  
+   - Output menunjukkan Child 2 selesai lebih dulu
+
+6. **Modifikasi Makefile**  
+   - Menambahkan entri `_ptest` ke dalam bagian `UPROGS`
 
 ---
 
 ## ✅ Uji Fungsionalitas
 
-* Program `ptest` membuat dua child process:
-  - Child pertama diberi prioritas `90` (lebih rendah)
-  - Child kedua diberi prioritas `10` (lebih tinggi)
-* Hasil yang diharapkan:
-  - Child 2 selesai duluan
-  - Child 1 selesai setelahnya
-  - Parent selesai terakhir
+Program pengujian:
+
+- `ptest`: Untuk menguji fungsi `set_priority()` dan memastikan penjadwalan berdasarkan prioritas telah berjalan sesuai ekspektasi.
 
 ---
 
 ## 📷 Hasil Uji
 
-### 📍 Output `ptest`:
+### 📍 `ptest`:
 
 ```
 Child 2 selesai
@@ -56,16 +69,20 @@ Parent selesai
 ```
 
 ### 📸 Screenshot:
-![hasil ptest](./screenshot/ptestPriority.png)
+<img width="1901" height="672" alt="modul 2" src="https://github.com/user-attachments/assets/99321a8f-1055-4d97-8620-2df437551967" />
 
 ---
 
 ## ⚠️ Kendala yang Dihadapi
-proses terlalu cepat sehingga hasil tidak konsisten 
-solusi:parent perlu diberi durasi sleep
+
+- Proses dengan prioritas sama tetap akan dipilih secara linear dari array proses, sehingga masih berpotensi tidak adil (no tie-breaking improvement).
+- Jika semua proses memiliki prioritas sama dan tidak selesai, starvation dapat terjadi pada proses dengan prioritas lebih rendah.
+- Tidak ada mekanisme aging yang diimplementasikan untuk meningkatkan fairness.
+
+
+Output menunjukkan bahwa proses dengan prioritas lebih tinggi (Child 2) dieksekusi terlebih dahulu meskipun dibuat setelah proses lainnya.
 
 ---
-
 ## 📚 Referensi
 
 * Buku xv6 MIT: [https://pdos.csail.mit.edu/6.828/2018/xv6/book-rev11.pdf](https://pdos.csail.mit.edu/6.828/2018/xv6/book-rev11.pdf)  
@@ -73,4 +90,4 @@ solusi:parent perlu diberi durasi sleep
 * Diskusi praktikum, GitHub Issues, Stack Overflow
   
 ---
----
+
