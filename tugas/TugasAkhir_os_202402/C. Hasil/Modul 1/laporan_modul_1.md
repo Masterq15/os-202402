@@ -1,80 +1,91 @@
-
 # 📝 Laporan Tugas Akhir
 
 **Mata Kuliah**: Sistem Operasi  
 **Semester**: Genap / Tahun Ajaran 2024–2025  
-**Nama**: Risky Dimas Nugroho                          
+**Nama**: Risky Dimas Nugroho  
 **NIM**: 240202882  
-**Modul yang Dikerjakan**:  
-Modul 1 – System Call dan Instrumentasi Kernel  
+**Modul yang Dikerjakan**: Modul 1 – *System Call dan Instrumentasi Kernel*
 
 ---
 
 ## 📌 Deskripsi Singkat Tugas
 
-* **Modul 1 – System Call dan Instrumentasi Kernel**:  
-  Menambahkan dua system call baru, yaitu `getpinfo()` untuk melihat proses yang aktif, dan `getreadcount()` untuk menghitung jumlah pemanggilan `read()` sejak sistem booting. Informasi proses yang diambil mencakup PID, ukuran memori, dan nama proses.
+Pada Modul 1 ini, saya melakukan pengembangan terhadap kernel xv6 dengan menambahkan dua system call baru:
+
+1. `getpinfo()` untuk menampilkan informasi proses-proses aktif (PID, ukuran memori, dan nama proses).
+2. `getReadCount()` untuk menghitung total jumlah pemanggilan fungsi `read()` sejak sistem dinyalakan (boot).
+
+Tujuan dari tugas ini adalah untuk memperdalam pemahaman terkait mekanisme *system call* dan bagaimana kernel dapat diinstrumentasi untuk melakukan monitoring sistem secara real-time.
 
 ---
 
 ## 🛠️ Rincian Implementasi
 
-* Menambahkan dua system call `getpinfo()` dan `getreadcount()` di `sysproc.c` dan `syscall.c`
-* Mengedit `user.h`, `usys.S`, dan `syscall.h` untuk mendaftarkan syscall
-* Menambahkan struktur `struct pinfo` di `proc.h`
-* Menambahkan counter `readcount` di `sysfile.c` (tepatnya dalam fungsi `sys_read()`)
-* Sinkronisasi akses ke `ptable` dengan `acquire()` dan `release()`
-* Membuat dua program uji: `ptest.c` dan `rtest.c`
-* Menambahkan kedua program ke `UPROGS` dalam `Makefile`
+Langkah-langkah implementasi yang dilakukan:
+
+- Menambahkan struktur `struct pinfo` di file `proc.h` untuk menyimpan informasi proses.
+- Menambahkan variabel global `readcount` di `sysproc.c` untuk menghitung jumlah pemanggilan `read()`.
+- Menambahkan nomor syscall baru `SYS_getpinfo` dan `SYS_getreadcount` di `syscall.h`.
+- Menambahkan deklarasi syscall pada `user.h` dan `usys.S`.
+- Mendaftarkan fungsi syscall baru di `syscall.c`.
+- Mengimplementasikan dua fungsi syscall baru (`sys_getpinfo` dan `sys_getreadcount`) di `sysproc.c`.
+- Memodifikasi fungsi `sys_read` di `sysfile.c` untuk menambahkan counter `readcount++`.
+- Membuat dua program uji user-level (`ptest.c` dan `rtest.c`) serta mendaftarkannya di `Makefile`.
 
 ---
 
 ## ✅ Uji Fungsionalitas
 
-* `ptest`: untuk menguji `getpinfo()`, menampilkan semua proses aktif beserta PID, MEM, dan nama proses
-* `rtest`: untuk menguji `getReadCount()`, dengan menampilkan nilai read count sebelum dan sesudah membaca input
+Program pengujian yang digunakan:
+
+- `ptest`: untuk menguji system call `getpinfo()`
+- `rtest`: untuk menguji system call `getReadCount()`
 
 ---
 
 ## 📷 Hasil Uji
 
-### 📍 Contoh Output `ptest`:
+Lampirkan hasil uji berupa screenshot atau output terminal. Contoh:
+
+### 📍 Contoh Output `cowtest`:
 
 ```
-== Info Proses Aktif ==
-PID     MEM     NAME
-1       4096    init
-2       2048    sh
-3       2048    ptest
+Child sees: Y
+Parent sees: X
 ```
 
-### 📍 Contoh Output `rtest`:
+### 📍 Contoh Output `shmtest`:
 
 ```
-Read Count Sebelum: 4
-hello
-Read Count Setelah: 5
+Child reads: A
+Parent reads: B
 ```
 
-### 📸 Screenshot:
-![hasil ptest dan rtest](./screenshot/1.png)
----
+### 📍 Contoh Output `chmodtest`:
+
+```
+Write blocked as expected
+```
+
+Jika ada screenshot:
+
+```
+![hasil cowtest]<img width="1502" height="800" alt="modul 1" src="https://github.com/user-attachments/assets/3c0c39d4-5390-465f-993c-69eb99a810a8" />
+
+```
 
 ## ⚠️ Kendala yang Dihadapi
 
-* Menangani pointer dari user space menggunakan `argptr()`
-* Sinkronisasi akses ke `ptable` agar tidak terjadi race condition
-* Kesalahan umum seperti:
-  - Salah akses pointer (`.` vs `->`)
-  - Lupa meng-include `spinlock.h`
-  - Gagal membaca hasil syscall karena kesalahan definisi argumen
+- Awalnya terdapat error saat menggunakan `ptable_lock`, karena simbol ini tidak tersedia di versi `xv6-public` default. Solusinya adalah menggunakan `ptable.lock` yang memang tersedia.
+- Alokasi memori pada struct `pinfo` harus sinkron dengan batas jumlah proses (`MAX_PROC`), jika tidak akan terjadi buffer overflow.
+- Penulisan `argptr()` perlu hati-hati agar pointer struct dari user-space bisa dikenali dan diakses oleh kernel-space.
 
 ---
 
 ## 📚 Referensi
 
-* Buku xv6 MIT: [https://pdos.csail.mit.edu/6.828/2018/xv6/book-rev11.pdf](https://pdos.csail.mit.edu/6.828/2018/xv6/book-rev11.pdf)
-* Repositori xv6-public: [https://github.com/mit-pdos/xv6-public](https://github.com/mit-pdos/xv6-public)
-* Diskusi praktikum dan dokumentasi di Stack Overflow dan GitHub Issues
+- [xv6-public GitHub](https://github.com/mit-pdos/xv6-public)
+- [MIT xv6 Book](https://pdos.csail.mit.edu/6.828/2018/xv6/book-rev11.pdf)
+- Diskusi praktikum dan dokumentasi sistem call di kernel Linux
+- Stack Overflow & Github Issues terkait xv6 syscall dan read counter
 
----
