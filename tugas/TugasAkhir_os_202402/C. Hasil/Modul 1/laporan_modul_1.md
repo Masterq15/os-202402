@@ -77,16 +77,17 @@ Jika ada screenshot:
 
 ## ⚠️ Kendala yang Dihadapi
 
-- Awalnya terdapat error saat menggunakan `ptable_lock`, karena simbol ini tidak tersedia di versi `xv6-public` default. Solusinya adalah menggunakan `ptable.lock` yang memang tersedia.
-- Alokasi memori pada struct `pinfo` harus sinkron dengan batas jumlah proses (`MAX_PROC`), jika tidak akan terjadi buffer overflow.
-- Penulisan `argptr()` perlu hati-hati agar pointer struct dari user-space bisa dikenali dan diakses oleh kernel-space.
+* Menangani pointer dari user space menggunakan `argptr()`
+* Sinkronisasi akses ke `ptable` agar tidak terjadi race condition
+* Kesalahan umum seperti:
+  - Salah akses pointer (`.` vs `->`)
+  - Lupa meng-include `spinlock.h`
+  - Gagal membaca hasil syscall karena kesalahan definisi argumen
 
 ---
 
 ## 📚 Referensi
 
-- [xv6-public GitHub](https://github.com/mit-pdos/xv6-public)
-- [MIT xv6 Book](https://pdos.csail.mit.edu/6.828/2018/xv6/book-rev11.pdf)
-- Diskusi praktikum dan dokumentasi sistem call di kernel Linux
-- Stack Overflow & Github Issues terkait xv6 syscall dan read counter
-
+* Buku xv6 MIT: [https://pdos.csail.mit.edu/6.828/2018/xv6/book-rev11.pdf](https://pdos.csail.mit.edu/6.828/2018/xv6/book-rev11.pdf)
+* Repositori xv6-public: [https://github.com/mit-pdos/xv6-public](https://github.com/mit-pdos/xv6-public)
+* Diskusi praktikum dan dokumentasi di Stack Overflow dan GitHub Issues
