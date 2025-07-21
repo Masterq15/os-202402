@@ -69,7 +69,7 @@ Write blocked as expected
 
 Jika ada screenshot:
 
-```
+
 <img width="1502" height="800" alt="modul 1" src="https://github.com/user-attachments/assets/acd046b2-7388-4bd2-adfd-ddc35fc65bd6" />
 
 
