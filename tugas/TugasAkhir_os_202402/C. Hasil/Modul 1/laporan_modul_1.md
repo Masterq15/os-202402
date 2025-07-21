@@ -70,7 +70,8 @@ Write blocked as expected
 Jika ada screenshot:
 
 ```
-![hasil cowtest]<img width="1502" height="800" alt="modul 1" src="https://github.com/user-attachments/assets/3c0c39d4-5390-465f-993c-69eb99a810a8" />
+<img width="1502" height="800" alt="modul 1" src="https://github.com/user-attachments/assets/acd046b2-7388-4bd2-adfd-ddc35fc65bd6" />
+
 
 ```
 
