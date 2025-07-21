@@ -78,12 +78,10 @@ Jika ada screenshot:
 
 ## ⚠️ Kendala yang Dihadapi
 
-* Menangani pointer dari user space menggunakan `argptr()`
-* Sinkronisasi akses ke `ptable` agar tidak terjadi race condition
-* Kesalahan umum seperti:
-  - Salah akses pointer (`.` vs `->`)
-  - Lupa meng-include `spinlock.h`
-  - Gagal membaca hasil syscall karena kesalahan definisi argumen
+* Awalnya terdapat error saat menggunakan `ptable_lock`, karena simbol ini tidak tersedia di versi `xv6-public` default. Solusinya adalah menggunakan `ptable.lock` yang memang tersedia.
+* Alokasi memori pada struct `pinfo` harus sinkron dengan batas jumlah proses (`MAX_PROC`), jika tidak akan terjadi buffer overflow.
+* Penulisan `argptr()` perlu hati-hati agar pointer struct dari user-space bisa dikenali dan diakses oleh kernel-space.
+
 
 ---
 
