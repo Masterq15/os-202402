@@ -73,7 +73,8 @@ Jika ada screenshot:
 <img width="1502" height="800" alt="modul 1" src="https://github.com/user-attachments/assets/acd046b2-7388-4bd2-adfd-ddc35fc65bd6" />
 
 
-```
+---
+
 
 ## ⚠️ Kendala yang Dihadapi
 
@@ -86,8 +87,10 @@ Jika ada screenshot:
 
 ---
 
+
 ## 📚 Referensi
 
 * Buku xv6 MIT: [https://pdos.csail.mit.edu/6.828/2018/xv6/book-rev11.pdf](https://pdos.csail.mit.edu/6.828/2018/xv6/book-rev11.pdf)
 * Repositori xv6-public: [https://github.com/mit-pdos/xv6-public](https://github.com/mit-pdos/xv6-public)
 * Diskusi praktikum dan dokumentasi di Stack Overflow dan GitHub Issues
+---
