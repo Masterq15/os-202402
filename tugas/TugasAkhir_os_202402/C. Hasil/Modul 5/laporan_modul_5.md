@@ -37,7 +37,7 @@ Pengujian dilakukan dalam dua kondisi:
 * Saat dijalankan sebagai proses biasa (akan ditolak)
 * Saat dijalankan sebagai PID 1 (dapat mengakses log)
   
-```
+
 ## 📷 Hasil Uji
 
 ### 📍 Output `audit`:
@@ -45,14 +45,18 @@ Pengujian dilakukan dalam dua kondisi:
 === Audit Log ===
 
 [0] PID=1 SYSCALL=7 TICK=1
+
 [1] PID=1 SYSCALL=15 TICK=2
+
 [2] PID=1 SYSCALL=17 TICK=2
+
 ```
 ...
 
 
 
 ### 📸 Screenshot:
+
 <img width="1255" height="584" alt="Screenshot 2025-07-19 031006" src="https://github.com/user-attachments/assets/b0083abe-4118-4db0-8a50-4ab7ccc4cea4" />
 
 
