@@ -174,7 +174,7 @@ int main() {
 
 ```
 $ randomtest
-201 45 132 88 2 79 234 11
+159 114 41 116 67 198 109 232
 ```
 ### 📸 Screenshot:
 <img width="541" height="211" alt="Screenshot 2025-07-19 030118" src="https://github.com/user-attachments/assets/ee992944-7867-4a57-8167-f39a65a7856a" />
@@ -187,21 +187,11 @@ $ randomtest
 
 Selama implementasi, beberapa kendala teknis yang cukup menantang berhasil diatasi, di antaranya:
 
-1. **short mode; Seharusnya berada di file.h**  
-   inode tidak berada di fs.h.
-   ✅ Solusi: Menambahkan `short mode;` di `struct inode` pada file.h.
+1.Kesalahan menyimpan mode ke disk (dinode) menyebabkan konflik dengan struktur file system → diselesaikan dengan menyimpan mode hanya di inode memori.
 
-3. **Redefinisi dan dependensi melingkar `struct sleeplock` dan `spinlock`**  
-   Gagal build akibat duplikasi definisi dari header yang saling meng-include satu sama lain.  
-   ✅ Solusi: Gunakan include guard (`#ifndef/#define`) dan atur urutan `#include` secara ketat.
+2.Lupa melakukan ilock() sebelum mengakses inode, menyebabkan panic saat runtime.
 
-4. **Registrasi driver `randomread` tidak terdeteksi**  
-   Kompilasi gagal karena `randomread` tidak dideklarasikan saat `file.c` dibangun.  
-   ✅ Solusi: Tambahkan deklarasi `extern int randomread(...);` sebelum array `devsw[]`.
-
-5. **Device `/dev/random` gagal dibuat**  
-   Fungsi `mknod()` gagal digunakan karena belum dikenali.  
-   ✅ Solusi: Pastikan `mknod("/random", 3, 0);` ditambahkan di `init.c` dengan urutan benar.
+3.Device tidak terdeteksi karena salah menetapkan major number dalam mknod() → diperbaiki dengan sinkronisasi devsw[] dan mknod.
 
 ---
 
