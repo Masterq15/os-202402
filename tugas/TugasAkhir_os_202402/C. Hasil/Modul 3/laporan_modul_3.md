@@ -54,7 +54,6 @@ Child sees: Y
 Parent sees: X
 ```
 ### 📸 Screenshot:
-<img width="577" height="250" alt="Screenshot 2025-07-18 231300" src="https://github.com/user-attachments/assets/3895f86d-c844-475f-bca7-b30f71cf12f8" />
 <img width="537" height="216" alt="Screenshot 2025-07-18 231337" src="https://github.com/user-attachments/assets/9cb2d001-b933-440d-ab0f-c0a2f4af5a38" />
 
 
@@ -109,7 +108,8 @@ Child reads: A
 Parent reads: B
 ```
 ### 📸 Screenshot:
-![hasil ptest](./screenshot/shmtest.png)
+<img width="577" height="250" alt="Screenshot 2025-07-18 231300" src="https://github.com/user-attachments/assets/59defb07-e3e2-4b68-93b3-763655070c1b" />
+
 
 ---
 
