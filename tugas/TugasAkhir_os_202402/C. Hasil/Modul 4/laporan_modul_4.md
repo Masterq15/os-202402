@@ -5,7 +5,7 @@
 **Nama**: Risky Dimas Nugroho                        
 **NIM**: 240202882  
 **Modul yang Dikerjakan**:  
-MODUL 4 — XV6: Subsistem Kernel Alternatif
+MODUL 4 — XV6: Subsistem Kernel Alternatif (chmod() dan /dev/random)
 
 ---
 
@@ -113,7 +113,7 @@ Write blocked as expected
 
 ```
 ### 📸 Screenshot:
-![hasil chmodtest](./screenshot/chmodtest.png)
+<img width="535" height="201" alt="Screenshot 2025-07-19 030202" src="https://github.com/user-attachments/assets/38c03d8e-e7bf-4458-9cbd-39e9854397dc" />
 
 ---
 
@@ -177,7 +177,9 @@ $ randomtest
 201 45 132 88 2 79 234 11
 ```
 ### 📸 Screenshot:
-![hasil randomtest](./screenshot/randomtest_1.png)
+<img width="541" height="211" alt="Screenshot 2025-07-19 030118" src="https://github.com/user-attachments/assets/ee992944-7867-4a57-8167-f39a65a7856a" />
+
+<img width="563" height="268" alt="Screenshot 2025-07-19 025718" src="https://github.com/user-attachments/assets/6ff26d0c-64e6-4024-9dd0-623d58581da3" />
 
 ---
 
