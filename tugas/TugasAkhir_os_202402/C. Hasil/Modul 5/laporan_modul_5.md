@@ -43,10 +43,13 @@ Pengujian dilakukan dalam dua kondisi:
 ### 📍 Output `audit`:
 ```
 === Audit Log ===
+
 [0] PID=1 SYSCALL=7 TICK=1
 [1] PID=1 SYSCALL=15 TICK=2
 [2] PID=1 SYSCALL=17 TICK=2
+```
 ...
+
 
 
 ### 📸 Screenshot:
