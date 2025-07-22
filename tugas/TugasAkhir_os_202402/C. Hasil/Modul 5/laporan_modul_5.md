@@ -12,28 +12,32 @@ Modul 5 – Audit dan Keamanan Sistem
 ## 📌 Deskripsi Singkat Tugas
 
 * **Modul 5 – Audit dan Keamanan Sistem**:  
-  Mengimplementasikan fitur pencatatan (audit log) setiap system call yang dilakukan proses. Data dicatat ke buffer kernel yang hanya bisa diakses oleh proses `init` (PID 1) melalui system call `get_audit_log()`.
+  Pada Modul 5 ini, saya mengimplementasikan sistem audit log untuk sistem operasi xv6. Tujuan utamanya adalah mencatat setiap system call yang dipanggil oleh proses dan menyediakan mekanisme akses log melalui system call get_audit_log(), dengan pembatasan akses hanya untuk proses dengan PID 1 (init process). Hal ini penting untuk mendukung prinsip keamanan dan akuntabilitas sistem operasi.
 
 ---
 
 ## 🛠️ Rincian Implementasi
 
-* Menambahkan struktur `audit_entry` dan array `audit_log[]` di `syscall.c`
-* Mencatat `PID`, `syscall_num`, dan `tick` pada setiap pemanggilan system call
-* Menambahkan syscall baru `get_audit_log()` di `sysproc.c`, dan deklarasi di `defs.h`, `user.h`, `usys.S`, `syscall.h`
-* Program uji `audit.c` untuk menampilkan isi log
-* Memodifikasi `init.c` agar langsung menjalankan `audit` (sebagai PID 1)
-* Menambahkan `audit` ke `Makefile` dalam bagian `UPROGS`
+* Menambahkan struktur audit_entry untuk menyimpan log system call
+* Mengedit syscall() di syscall.c untuk mencatat semua system call ke log
+* Menambahkan system call baru get_audit_log() untuk membaca isi log (khusus PID 1)
+* Melakukan perubahan pada file:
+  * syscall.c, sysproc.c, user.h, usys.S, defs.h, syscall.h
+* Membuat program uji baru audit.c untuk menampilkan log
+* Menambahkan entri _audit di Makefile agar bisa dibangun bersama xv6
 
 ---
 
 ## ✅ Uji Fungsionalitas
 
-* `audit`: program utama dijalankan oleh `init`, menampilkan semua system call yang telah terjadi.
-* Jika program `audit` dijalankan oleh proses selain PID 1, maka akan gagal (`Access denied`)
+Program uji:
+* audit: Untuk menguji system call get_audit_log() dan melihat apakah log tercatat dengan benar
 
----
-
+Pengujian dilakukan dalam dua kondisi:
+* Saat dijalankan sebagai proses biasa (akan ditolak)
+* Saat dijalankan sebagai PID 1 (dapat mengakses log)
+  
+```
 ## 📷 Hasil Uji
 
 ### 📍 Output `audit`:
@@ -46,16 +50,16 @@ Modul 5 – Audit dan Keamanan Sistem
 ```
 
 ### 📸 Screenshot:
-![hasil ptest](./screenshot/audit_m5.png)
+<img width="1255" height="584" alt="Screenshot 2025-07-19 031006" src="https://github.com/user-attachments/assets/8fa70ed5-1824-40ef-a8a6-ed41b19f013e" />
+
 
 ---
 
 ## ⚠️ Kendala yang Dihadapi
 
-* Validasi PID di syscall `get_audit_log()` agar hanya proses `init` yang dapat mengakses log
-* Penanganan pointer user-space menggunakan `argptr()` dan `memmove()`
-* Menjaga proses `init` tetap hidup (menggunakan `sleep()` terus-menerus) agar kernel tidak panic
-* Menambahkan audit sebelum syscall dijalankan namun tetap aman dari error
+* Awalnya system call get_audit_log() dapat dipanggil oleh proses mana pun karena belum ada validasi PID → diselesaikan dengan menambahkan pengecekan proc->pid != 1 di implementasi syscall.
+* Salah pemetaan buffer audit antara kernel-space ke user-space → diatasi dengan argptr() dan memmove() secara hati-hati.
+* Terbatasnya jumlah log (maksimum 128) mengharuskan pembatasan jumlah data yang disalin ke user agar tidak buffer overflow.
 
 ---
 
