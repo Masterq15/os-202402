@@ -58,9 +58,9 @@ PID     MEM     NAME
 ### 📍 Contoh Output `rtest`:
 
 ```
-Read Count Sebelum: 4
+Read Count Sebelum: 12
 hello
-Read Count Setelah: 5
+Read Count Setelah: 13
 
 ```
 
