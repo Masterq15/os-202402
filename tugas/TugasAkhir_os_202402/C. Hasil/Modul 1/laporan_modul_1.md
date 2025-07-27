@@ -47,28 +47,24 @@ Program pengujian yang digunakan:
 
 Lampirkan hasil uji berupa screenshot atau output terminal. Contoh:
 
-### 📍 Contoh Output `cowtest`:
-
 ```
-Child sees: Y
-Parent sees: X
-```
-
-### 📍 Contoh Output `shmtest`:
-
-```
-Child reads: A
-Parent reads: B
+== Info Proses Aktif ==
+PID     MEM     NAME
+1       4096    init
+2       2048    sh
+3       2048    ptest
 ```
 
-### 📍 Contoh Output `chmodtest`:
+### 📍 Contoh Output `rtest`:
 
 ```
-Write blocked as expected
+Read Count Sebelum: 4
+hello
+Read Count Setelah: 5
+
 ```
 
-Jika ada screenshot:
-
+### 📸 Screenshot:
 
 <img width="1502" height="800" alt="modul 1" src="https://github.com/user-attachments/assets/acd046b2-7388-4bd2-adfd-ddc35fc65bd6" />
 
